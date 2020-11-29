@@ -1,0 +1,94 @@
+#include <IRremote.h>
+
+#define IN1 12
+#define IN2 11
+#define IN3 10
+#define IN4 9
+
+IRrecv rec(8);
+
+decode_results res;
+
+void setup(){
+ rec.enableIRIn();
+ Serial.begin(9600);
+  
+ pinMode(IN1, OUTPUT);
+ pinMode(IN2, OUTPUT);
+ pinMode(IN3, OUTPUT);
+ pinMode(IN4, OUTPUT);
+  
+ digitalWrite(IN1, LOW);
+ digitalWrite(IN2, LOW);
+ digitalWrite(IN3, LOW);
+ digitalWrite(IN4, LOW);
+}
+void loop(){
+  if(rec.decode(&res)){
+    if(res.value == 0xFD6897){
+      Serial.print("right");
+      right();
+    }
+    rec.resume();
+    if(res.value == 0xFD9867){
+      Serial.print("back");
+      reverse();
+    }
+    rec.resume();
+    if(res.value == 0xFD28D7){
+      Serial.print("left");
+      left();
+    }
+    rec.resume();
+    if(res.value == 0xFD8877){
+      Serial.print("forward");
+      forward();
+    }
+    rec.resume();
+    if(res.value == 0xFDA857){
+      Serial.print("stop");
+      stoprobot();
+    }
+    rec.resume();
+  }
+}
+
+void forward()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void reverse()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+void left()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void right()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+
+void stoprobot()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
